@@ -1,62 +1,64 @@
-# Auditoría de lógica de SLA y exposición de facturación en telecomunicaciones
+🌐 English | [Español](README.es.md)
 
-Pipeline en Python que detecta y cuantifica un defecto de lógica de negocio en el cálculo de cumplimiento de SLA, y automatiza el reporte ejecutivo del hallazgo.
+# SLA logic audit and billing exposure in telecommunications
 
-> **Nota sobre los datos:** este repositorio usa datos 100% sintéticos generados con una semilla fija, sin ninguna relación con clientes, empleadores o información real. El objetivo es mostrar la metodología de auditoría de datos aplicada a un problema real de la industria de telecomunicaciones (facturación ligada a cumplimiento de SLA), no exponer información confidencial de ningún tercero.
+Python pipeline that detects and quantifies a business-logic defect in SLA compliance calculation, and automates the executive report of the finding.
 
-## El problema de negocio
+> **Note on the data:** this repository uses 100% synthetic data generated with a fixed seed, with no relation to any real client, employer, or information. The goal is to show the data-audit methodology applied to a real telecom industry problem (billing tied to SLA compliance), not to expose any third party's confidential information.
 
-En operaciones de telecomunicaciones, el cumplimiento de SLA suele estar directamente ligado a la facturación: un caso que incumple el SLA puede generar penalidad contractual o crédito de servicio al cliente.
+## The business problem
 
-Un patrón de error común: la lógica de cálculo mide el tiempo de resolución en **horas corridas (24/7)** en lugar de **horas hábiles (lunes a viernes, horario laboral)**. Como el reloj corrido nunca se detiene, un caso abierto un viernes por la tarde acumula horas rápidamente durante el fin de semana y aparece como "incumplido" — aunque el equipo lo resolvió dentro del tiempo hábil real.
+In telecommunications operations, SLA compliance is often directly tied to billing: a case that breaches its SLA can trigger a contractual penalty or a service credit to the client.
 
-El resultado: casos marcados como incumplimiento que en realidad sí cumplieron, con dos consecuencias:
+A common failure pattern: the calculation logic measures resolution time in **calendar hours (24/7)** instead of **business hours (Monday to Friday, working hours)**. Since the calendar clock never stops, a case opened on a Friday afternoon accumulates hours quickly over the weekend and shows up as "breached" — even though the team resolved it within the real working-hours window.
 
-1. **Económica** — exposición a penalidades o créditos de servicio que no correspondían.
-2. **Reputacional** — una imagen de desempeño peor que la real frente al cliente.
+The result: cases flagged as breaches that were not real breaches, with two consequences:
 
-## Qué hace este proyecto
+1. **Economic** — exposure to penalties or service credits that did not actually apply.
+2. **Reputational** — a worse-than-real performance picture in front of the client.
 
-| Script | Función |
+## What this project does
+
+| Script | Function |
 |---|---|
-| `src/generate_synthetic_data.py` | Genera 12,000 casos sintéticos de soporte/facturación con fecha de apertura, cierre, tipo de caso y SLA objetivo. |
-| `src/sla_audit.py` | Calcula el cumplimiento con la lógica defectuosa (horas corridas) y con la lógica correcta (horas hábiles), y cuantifica la diferencia. |
-| `src/report_generator.py` | Automatiza la generación de un reporte ejecutivo en Excel a partir de la auditoría — reemplaza el armado manual de tablas caso por caso. |
+| `src/generate_synthetic_data.py` | Generates 12,000 synthetic support/billing cases with open date, close date, case type, and target SLA. |
+| `src/sla_audit.py` | Calculates compliance under the defective logic (calendar hours) and the correct logic (business hours), and quantifies the difference. |
+| `src/report_generator.py` | Automates the generation of an executive Excel report from the audit — replaces manually building tables case by case. |
 
-## Resultado de la auditoría (sobre datos sintéticos)
+## Audit result (on synthetic data)
 
 ```
-Casos totales analizados:              12,000
-Casos marcados como incumplidos
-  sin serlo realmente (falso breach):  4,149  (34.58%)
-Monto expuesto a penalidad indebida:   USD 494,290.74
-Cumplimiento reportado (con defecto):  64.22%
-Cumplimiento real (corregido):         98.79%
-Brecha de cumplimiento subestimada:    34.57 puntos
+Total cases analyzed:                12,000
+Cases wrongly flagged as breached
+  (false breach):                    4,149  (34.58%)
+Amount exposed to undue penalty:     USD 494,290.74
+Reported compliance (with defect):   64.22%
+Real compliance (corrected):         98.79%
+Underestimated compliance gap:       34.57 points
 ```
 
-Es decir: con la lógica correcta, el cumplimiento real de esta operación sintética es 98.79%, no 64.22% como reportaba el cálculo defectuoso — una brecha de más de 34 puntos porcentuales, con casi medio millón de dólares en facturación potencialmente afectada por una penalidad que no debía aplicarse.
+In other words: under the correct logic, this synthetic operation's real compliance is 98.79%, not 64.22% as the defective calculation reported — a gap of more than 34 percentage points, with almost half a million dollars in billing potentially affected by a penalty that should never have applied.
 
-## Cómo correrlo
+## How to run it
 
 ```bash
 pip install -r requirements.txt
-python src/generate_synthetic_data.py   # genera data/synthetic_cases.csv
-python src/sla_audit.py                  # corre la auditoría, imprime resumen
-python src/report_generator.py           # genera outputs/reporte_ejecutivo_sla.xlsx
+python src/generate_synthetic_data.py   # generates data/synthetic_cases.csv
+python src/sla_audit.py                  # runs the audit, prints a summary
+python src/report_generator.py           # generates outputs/sla_executive_report.xlsx
 ```
 
-## Stack técnico
+## Tech stack
 
-- **Python** — pandas, numpy para el pipeline de datos
-- **openpyxl** — generación automatizada de reportes Excel
-- Lógica de negocio modularizada: generación de datos, motor de auditoría y capa de reporting están separados, replicando cómo se estructura un pipeline de producción real
+- **Python** — pandas, numpy for the data pipeline
+- **openpyxl** — automated Excel report generation
+- Business logic is modularized: data generation, the audit engine, and the reporting layer are kept separate, mirroring how a real production pipeline is structured
 
-## Contexto
+## Context
 
-Este proyecto está inspirado en el tipo de trabajo que hago como analista de datos en telecomunicaciones: gestión de reporting de SLA y facturación para operaciones multipaís, y detección de inconsistencias en la lógica de cálculo con impacto económico directo. Los datos y cifras de este repositorio son ilustrativos; no corresponden a ningún empleador ni cliente real.
+This project is inspired by the kind of work I do as a data analyst in telecommunications: managing SLA and billing reporting for multi-country operations, and detecting inconsistencies in calculation logic with direct economic impact. The data and figures in this repository are illustrative; they do not correspond to any real employer or client.
 
 ---
 
 **Camilo Andrés León Rubriche** — Data & BI Analyst
-[LinkedIn](https://linkedin.com/in/caleru) · [correo](mailto:camiloleonrubriche@outlook.com)
+[LinkedIn](https://www.linkedin.com/in/caleru) · [email](mailto:camiloleonrubriche@outlook.com)

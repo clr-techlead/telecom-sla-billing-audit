@@ -1,11 +1,11 @@
 """
 generate_synthetic_data.py
 
-Genera un dataset SINTÉTICO de casos de soporte/facturación para una
-operación de telecomunicaciones ficticia, con un defecto de lógica de
-negocio inyectado a propósito (igual en espíritu al que se audita en
-sla_audit.py). Todos los nombres, países y volúmenes son inventados
-para fines de portafolio; no representan ninguna operación real.
+Generates a SYNTHETIC dataset of support/billing cases for a fictional
+telecom operation, with a business-logic defect injected on purpose
+(same spirit as the one audited in sla_audit.py). All names, countries
+and volumes are made up for portfolio purposes; they do not represent
+any real operation.
 """
 
 import numpy as np
@@ -15,19 +15,19 @@ from datetime import datetime, timedelta
 np.random.seed(42)
 
 N_CASES = 12000
-COUNTRIES = ["País A", "País B", "País C", "País D"]
-CASE_TYPES = ["Reclamo de facturación", "Falla de servicio", "Solicitud técnica", "Ajuste de plan"]
+COUNTRIES = ["Country A", "Country B", "Country C", "Country D"]
+CASE_TYPES = ["Billing complaint", "Service outage", "Technical request", "Plan change"]
 
-# SLA objetivo por tipo de caso, en horas hábiles
+# Target SLA per case type, in business hours
 SLA_TARGET_HOURS = {
-    "Reclamo de facturación": 48,
-    "Falla de servicio": 24,
-    "Solicitud técnica": 72,
-    "Ajuste de plan": 24,
+    "Billing complaint": 48,
+    "Service outage": 24,
+    "Technical request": 72,
+    "Plan change": 24,
 }
 
 def business_hours_between(start: datetime, end: datetime) -> float:
-    """Calcula horas hábiles (L-V, 8am-6pm) entre dos timestamps."""
+    """Computes business hours (Mon-Fri, 8am-6pm) between two timestamps."""
     if end <= start:
         return 0.0
     total_hours = 0.0
@@ -52,7 +52,7 @@ def generate_dataset():
             hours=np.random.randint(0, 24),
         )
 
-        # Tiempo de resolución real: la mayoría cumple, algunos se pasan
+        # Real resolution time: most cases meet the target, some overrun
         resolution_hours_real = np.random.gamma(shape=2.0, scale=target / 2.2)
         closed_at = opened_at + timedelta(hours=float(resolution_hours_real))
 
@@ -73,4 +73,4 @@ def generate_dataset():
 if __name__ == "__main__":
     df = generate_dataset()
     df.to_csv("data/synthetic_cases.csv", index=False)
-    print(f"Dataset sintético generado: {len(df)} casos -> data/synthetic_cases.csv")
+    print(f"Synthetic dataset generated: {len(df)} cases -> data/synthetic_cases.csv")

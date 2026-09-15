@@ -1,13 +1,13 @@
 """
 report_generator.py
 
-Automatiza la generación de un reporte ejecutivo en Excel a partir de
-los resultados de la auditoría, reemplazando lo que en un flujo manual
-sería copiar y pegar tablas en Word/Excel caso por caso.
+Automates the generation of an executive Excel report from the audit
+results, replacing what in a manual workflow would be copying and
+pasting tables into Word/Excel case by case.
 
-Salida: outputs/reporte_ejecutivo_sla.xlsx con dos hojas:
-  - Resumen: KPIs de la auditoría.
-  - Detalle_por_pais: desglose de casos e impacto económico.
+Output: outputs/sla_executive_report.xlsx with two sheets:
+  - Summary: audit KPIs.
+  - Breakdown_by_country: case count and economic impact by country.
 """
 
 import pandas as pd
@@ -19,22 +19,22 @@ def build_report(input_csv: str, output_xlsx: str):
     audited = audit_sla(raw)
     impact = summarize_impact(audited)
 
-    resumen = pd.DataFrame([
-        {"Métrica": "Casos totales analizados", "Valor": impact["total_cases"]},
-        {"Métrica": "Casos marcados como incumplidos sin serlo (falso breach)", "Valor": impact["cases_flipped_by_defect"]},
-        {"Métrica": "% de casos con falso breach", "Valor": f"{impact['pct_cases_flipped']}%"},
-        {"Métrica": "Monto expuesto a penalidad indebida (USD)", "Valor": impact["billing_exposed_usd"]},
-        {"Métrica": "Cumplimiento SLA reportado (con defecto)", "Valor": f"{impact['sla_compliance_naive_pct']}%"},
-        {"Métrica": "Cumplimiento SLA real (lógica corregida)", "Valor": f"{impact['sla_compliance_correct_pct']}%"},
-        {"Métrica": "Brecha de cumplimiento subestimada", "Valor": f"{abs(impact['compliance_gap_points'])} pts"},
+    summary = pd.DataFrame([
+        {"Metric": "Total cases analyzed", "Value": impact["total_cases"]},
+        {"Metric": "Cases wrongly flagged as breached (false breach)", "Value": impact["cases_flipped_by_defect"]},
+        {"Metric": "% of cases with false breach", "Value": f"{impact['pct_cases_flipped']}%"},
+        {"Metric": "Amount exposed to undue penalty (USD)", "Value": impact["billing_exposed_usd"]},
+        {"Metric": "Reported SLA compliance (with defect)", "Value": f"{impact['sla_compliance_naive_pct']}%"},
+        {"Metric": "Real SLA compliance (corrected logic)", "Value": f"{impact['sla_compliance_correct_pct']}%"},
+        {"Metric": "Underestimated compliance gap", "Value": f"{abs(impact['compliance_gap_points'])} pts"},
     ])
 
     with pd.ExcelWriter(output_xlsx, engine="openpyxl") as writer:
-        resumen.to_excel(writer, sheet_name="Resumen", index=False)
-        impact["breakdown_by_country"].to_excel(writer, sheet_name="Detalle_por_pais")
+        summary.to_excel(writer, sheet_name="Summary", index=False)
+        impact["breakdown_by_country"].to_excel(writer, sheet_name="Breakdown_by_country")
 
-    print(f"Reporte ejecutivo generado en: {output_xlsx}")
+    print(f"Executive report generated at: {output_xlsx}")
 
 
 if __name__ == "__main__":
-    build_report("data/synthetic_cases.csv", "outputs/reporte_ejecutivo_sla.xlsx")
+    build_report("data/synthetic_cases.csv", "outputs/sla_executive_report.xlsx")

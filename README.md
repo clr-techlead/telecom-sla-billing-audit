@@ -59,4 +59,4 @@ Este proyecto está inspirado en el tipo de trabajo que hago como analista de da
 ---
 
 **Camilo Andrés León Rubriche** — Data & BI Analyst
-[LinkedIn](https://linkedin.com/in/tu-usuario) · [correo](mailto:camiloleonrubriche@outlook.com)
+[LinkedIn](https://linkedin.com/in/caleonru) · [correo](mailto:camiloleonrubriche@outlook.com)

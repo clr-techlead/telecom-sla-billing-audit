@@ -37,6 +37,8 @@ Cumplimiento real (corregido):         98.79%
 Brecha de cumplimiento subestimada:    34.57 puntos
 ```
 
+![Resumen ejecutivo](outputs/resumen_ejecutivo.png)
+
 Es decir: con la lógica correcta, el cumplimiento real de esta operación sintética es 98.79%, no 64.22% como reportaba el cálculo defectuoso — una brecha de más de 34 puntos porcentuales, con casi medio millón de dólares en facturación potencialmente afectada por una penalidad que no debía aplicarse.
 
 ## Cómo correrlo

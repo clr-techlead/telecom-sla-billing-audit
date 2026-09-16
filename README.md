@@ -37,6 +37,8 @@ Real compliance (corrected):         98.79%
 Underestimated compliance gap:       34.57 points
 ```
 
+![Executive summary](outputs/resumen_ejecutivo.png)
+
 In other words: under the correct logic, this synthetic operation's real compliance is 98.79%, not 64.22% as the defective calculation reported — a gap of more than 34 percentage points, with almost half a million dollars in billing potentially affected by a penalty that should never have applied.
 
 ## How to run it

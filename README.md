@@ -1,6 +1,5 @@
 [![Python tests](https://github.com/clr-techlead/telecom-sla-billing-audit/actions/workflows/python-tests.yml/badge.svg)](https://github.com/clr-techlead/telecom-sla-billing-audit/actions/workflows/python-tests.yml)
 
-![Executive summary](outputs/resumen_ejecutivo.png)
 
 🌐 English | [Español](README.es.md)
 

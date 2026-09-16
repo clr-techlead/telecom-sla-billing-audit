@@ -67,3 +67,12 @@ This project is inspired by the kind of work I do as a data analyst in telecommu
 
 **Camilo Andrés León Rubriche** — Data & BI Analyst
 [LinkedIn](https://www.linkedin.com/in/caleru) · [email](mailto:camiloleonrubriche@outlook.com)
+
+
+## Tests
+
+Run the unit tests locally with:
+
+```bash
+python -m unittest discover tests -v
+```
